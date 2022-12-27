@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kantin/const/navigasi.dart';
-import 'package:kantin/presentasi/page/detail_pesanan.dart';
+import 'package:kantin/presentasi/page/detail_riwayat_selesai.dart';
 
 import '../../const/main_app.dart';
 import '../widget/card_riwayat.dart';
@@ -73,7 +73,7 @@ class RiwayatView extends StatelessWidget {
                           status: 1,
                           onTap: () {
                             Navigator.of(context)
-                                .push(toUpPage(const DetailPesanan()));
+                                .push(toUpPage(const DetailRiwayatSelesai()));
                           })),
                 ),
                 ListView(

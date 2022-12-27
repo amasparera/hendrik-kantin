@@ -4,6 +4,7 @@ import 'package:kantin/const/navigasi.dart';
 import 'package:kantin/dummi.dart';
 import 'package:kantin/presentasi/page/panggilan_view.dart';
 import 'package:kantin/presentasi/page/pesan_view.dart';
+import 'package:kantin/presentasi/page/lihat_detail.dart';
 
 import '../../const/main_app.dart';
 
@@ -247,7 +248,10 @@ class _CheckoutViewState extends State<CheckoutView> {
                       ),
                       Center(
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .push(toUpPage(const LihatDetail()));
+                            },
                             child: const Text(
                               "Lihat detail",
                               style: TextStyle(

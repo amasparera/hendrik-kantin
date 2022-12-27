@@ -14,7 +14,7 @@ const Color fontPurple = Color(0xff9C27B0);
 const Color shadow = Color(0xffBFBFBF);
 const Color star = Color(0xffFBC02D);
 
-const double padding = 24;
+const double padding = 20;
 
 const TextStyle mainStyle =
     TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: fontBlack);

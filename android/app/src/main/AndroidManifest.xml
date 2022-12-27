@@ -2,7 +2,7 @@
     package="pakhendrik.com.kantin">
    <uses-permission android:name="android.permission.INTERNET"/> 
    <application
-        android:label="kantin"
+        android:label="E-Kantin"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

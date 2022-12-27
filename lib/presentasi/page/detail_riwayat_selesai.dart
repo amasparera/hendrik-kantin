@@ -4,14 +4,16 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:kantin/const/main_app.dart';
 import 'package:kantin/dummi.dart';
 
-class DetailPesanan extends StatefulWidget {
-  const DetailPesanan({super.key});
+import '../widget/list_harga.dart';
+
+class DetailRiwayatSelesai extends StatefulWidget {
+  const DetailRiwayatSelesai({super.key});
 
   @override
-  State<DetailPesanan> createState() => _DetailPesananState();
+  State<DetailRiwayatSelesai> createState() => _DetailRiwayatSelesaiState();
 }
 
-class _DetailPesananState extends State<DetailPesanan> {
+class _DetailRiwayatSelesaiState extends State<DetailRiwayatSelesai> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -311,34 +313,6 @@ class _DetailPesananState extends State<DetailPesanan> {
           ),
         ],
       )),
-    );
-  }
-}
-
-class ListHarga extends StatelessWidget {
-  const ListHarga({
-    Key? key,
-    required this.text,
-    required this.quantity,
-  }) : super(key: key);
-
-  final String text;
-  final String quantity;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-            child: Text(
-          text,
-          style: const TextStyle(fontSize: 12),
-        )),
-        Text(
-          quantity,
-          style: const TextStyle(fontSize: 12),
-        )
-      ],
     );
   }
 }

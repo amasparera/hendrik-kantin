@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
             create: (_) => injection.locator<KeranjangController>())
       ],
       child: MaterialApp(
-          title: "e-Kantin",
+          title: "E-Kantin",
           debugShowCheckedModeBanner: false,
           home: const OnBoardView(),
           theme: ThemeData.light().copyWith(
