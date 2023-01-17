@@ -40,11 +40,14 @@ class ExplorView extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () => toPageCupertino(context, const Profileview()),
-                  child: const Hero(
+                  child: Hero(
                     tag: "avatar",
                     child: CircleAvatar(
+                      backgroundColor: Colors.grey.shade200,
+                      onBackgroundImageError: (exception, stackTrace) =>
+                          const Icon(Icons.person),
                       radius: 15,
-                      backgroundImage: NetworkImage(person),
+                      backgroundImage: const NetworkImage(person),
                     ),
                   ),
                 )

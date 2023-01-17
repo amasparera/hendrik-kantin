@@ -105,7 +105,7 @@ class _DasbordViewState extends State<DasbordView> {
                                 const CircleAvatar(
                                   backgroundImage: NetworkImage(person),
                                 ),
-                                SizedBox(width: 12),
+                                const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:

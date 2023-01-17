@@ -6,6 +6,7 @@ import 'package:kantin/presentasi/widget/main_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../const/main_app.dart';
+import '../../const/request_datate.dart';
 import 'cek_karakter.dart';
 import 'custom_divider.dart';
 import 'main_textfield.dart';
@@ -17,6 +18,7 @@ class SingUpWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final co = context.read<LoginController>();
     return FadeIn(
       duration: const Duration(milliseconds: 500),
       child: Padding(
@@ -36,6 +38,7 @@ class SingUpWidget extends StatelessWidget {
               const Text("Hai, Selamat Datang di e-Kantin!"),
               const SizedBox(height: 24),
               MainTextField(
+                controller: co.nameDaftar,
                 hint: "Nama lengkap",
                 icon: Image.asset(
                   "assets/icon/ID.png",
@@ -43,83 +46,122 @@ class SingUpWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              const MainTextField(
+              MainTextField(
+                controller: co.emailDaftar,
                 hint: "Email atau nomor ponsel",
-                icon: Icon(
+                icon: const Icon(
                   Icons.email_outlined,
                   color: Color(0xffBDBDBD),
                 ),
               ),
               const SizedBox(height: 12),
-              const MainTextField(
-                hint: "Password",
-                obscure: true,
-                icon: Icon(
-                  Icons.lock_outline_rounded,
-                  color: Color(0xffBDBDBD),
-                ),
-                visibiliti: Icon(Icons.visibility_off_outlined,
-                    color: Color(0xffBDBDBD)),
-              ),
+              Consumer<LoginController>(builder: (context, c, _) {
+                return MainTextField(
+                  onChange: (value) => c.readPass(),
+                  controller: c.passwordDaftar,
+                  hint: "Password",
+                  obscure: c.visibilitidaftar,
+                  icon: const Icon(
+                    Icons.lock_outline_rounded,
+                    color: Color(0xffBDBDBD),
+                  ),
+                  visibiliti: GestureDetector(
+                    onTap: () => c.swithVisibilitidafatar(),
+                    child: Icon(
+                        c.visibilitidaftar
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility,
+                        color: const Color(0xffBDBDBD)),
+                  ),
+                );
+              }),
               const SizedBox(height: 8),
-              const CekCharakter(
-                fill: true,
-                text: "Memiliki 8 charakter",
-              ),
-              const CekCharakter(
-                fill: false,
-                text: "Memiliki Setidaknya 1 karakter kapital",
-              ),
-              const CekCharakter(
-                fill: false,
-                text: "Memiliki karakter unik seperti ~!@#\$%^&*().",
-              ),
-              const CekCharakter(
-                fill: false,
-                text: "Memiliki karakter numerik",
-              ),
+              Consumer<LoginController>(builder: (context, c, _) {
+                return c.openPass
+                    ? Column(
+                        children: [
+                          CekCharakter(
+                            fill: c.hasMinLength,
+                            text: "Memiliki 8 charakter",
+                          ),
+                          CekCharakter(
+                            fill: c.hasUppercase,
+                            text: "Memiliki Setidaknya 1 karakter kapital",
+                          ),
+                          CekCharakter(
+                            fill: c.hasSpecialCharacters,
+                            text:
+                                "Memiliki karakter unik seperti ~!@#\$%^&*().",
+                          ),
+                          CekCharakter(
+                            fill: c.hasDigits,
+                            text: "Memiliki karakter numerik",
+                          ),
+                        ],
+                      )
+                    : const SizedBox();
+              }),
               // const SizedBox(height: ),
               Transform.translate(
                 offset: const Offset(-12, 0),
-                child: Row(
-                  children: [
-                    Checkbox(
-                      value: true,
-                      fillColor: const MaterialStatePropertyAll(purple),
-                      onChanged: (value) {},
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
+                child: Consumer<LoginController>(builder: (context, c, _) {
+                  return Row(
+                    children: [
+                      Checkbox(
+                        value: c.syarat,
+                        fillColor: const MaterialStatePropertyAll(purple),
+                        onChanged: (value) => c.swithSyarat(),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        side: BorderSide(
+                            width: 1.5,
+                            color: Theme.of(context).unselectedWidgetColor),
+                        splashRadius: 0,
                       ),
-                      side: BorderSide(
-                          width: 1.5,
-                          color: Theme.of(context).unselectedWidgetColor),
-                      splashRadius: 0,
-                    ),
-                    Expanded(
-                      child: RichText(
-                        text: const TextSpan(
-                            text: "Saya setuju untuk ",
-                            style: TextStyle(color: fontBlack),
-                            children: [
-                              TextSpan(
-                                  text: "Ketentuan Layanan",
-                                  style: TextStyle(color: Colors.lightBlue)),
-                              TextSpan(text: " dan "),
-                              TextSpan(
-                                  text: "Kebijakan Privasi.",
-                                  style: TextStyle(color: Colors.lightBlue))
-                            ]),
+                      Expanded(
+                        child: RichText(
+                          text: const TextSpan(
+                              text: "Saya setuju untuk ",
+                              style: TextStyle(color: fontBlack),
+                              children: [
+                                TextSpan(
+                                    text: "Ketentuan Layanan",
+                                    style: TextStyle(color: Colors.lightBlue)),
+                                TextSpan(text: " dan "),
+                                TextSpan(
+                                    text: "Kebijakan Privasi.",
+                                    style: TextStyle(color: Colors.lightBlue))
+                              ]),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                }),
               ),
               const SizedBox(height: 2),
-              MainButton(
-                onPress: () {},
-                text: "Buat Akun",
-                symetry: 0,
-              ),
+              Consumer<LoginController>(builder: (context, c, _) {
+                return MainButton(
+                  onPress: () {
+                    c.reqDaftar == RequestState.empty
+                        ? c.daftar(context)
+                        : null;
+                  },
+                  text:
+                      c.reqDaftar == RequestState.empty ? "Buat Akunmu" : null,
+                  symetry: 0,
+                  child: c.reqDaftar == RequestState.loading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: bg,
+                            strokeWidth: 1.5,
+                          ),
+                        )
+                      : null,
+                );
+              }),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kantin/const/main_app.dart';
 import 'package:kantin/const/navigasi.dart';
-import 'package:kantin/presentasi/page/verifikasi_password_view.dart';
+import 'package:kantin/const/request_datate.dart';
+import 'package:kantin/presentasi/controller/login_controller.dart';
 import 'package:kantin/presentasi/widget/main_button.dart';
+import 'package:provider/provider.dart';
 
 import '../widget/main_textfield.dart';
 
@@ -11,6 +13,7 @@ class LupaPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final co = context.read<LoginController>();
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
@@ -39,20 +42,37 @@ class LupaPassword extends StatelessWidget {
           const Text(
               "Masukkan e-mail yang terdaftar. Kami akan mengirimkan kode verifikasi untuk kamu, atur ulang sandi"),
           const SizedBox(height: padding),
-          const MainTextField(
+          MainTextField(
+            controller: co.emailLupaPassword,
             hint: "Email atau nomor ponsel",
-            icon: Icon(
+            icon: const Icon(
               Icons.email_outlined,
               color: Color(0xffBDBDBD),
             ),
           ),
           const SizedBox(height: padding * 2),
-          MainButton(
-            onPress: () {
-              toPageCupertino(context, const VerifikasiPasswordView());
+          Consumer<LoginController>(
+            builder: (context, c, _) {
+              return MainButton(
+                onPress: () {
+                  c.reqLupaPassword == RequestState.empty
+                      ? c.lupaPassword(context)
+                      : null;
+                },
+                text: c.reqLupaPassword == RequestState.empty ? "Lanjut" : null,
+                symetry: 0,
+                child: c.reqLupaPassword == RequestState.loading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: bg,
+                          strokeWidth: 1.5,
+                        ),
+                      )
+                    : null,
+              );
             },
-            text: "Lanjut",
-            symetry: 0,
           ),
           const SizedBox(height: padding),
         ],

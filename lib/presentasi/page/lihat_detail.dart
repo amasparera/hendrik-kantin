@@ -20,7 +20,7 @@ class LihatDetail extends StatelessWidget {
           children: [
             Center(
               child: Container(
-                margin: EdgeInsets.symmetric(vertical: padding),
+                margin: const EdgeInsets.symmetric(vertical: padding),
                 height: 3,
                 width: padding,
                 decoration: BoxDecoration(

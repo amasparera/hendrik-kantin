@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kantin/const/main_app.dart';
+import 'package:kantin/presentasi/controller/login_controller.dart';
+import 'package:provider/provider.dart';
 
 class OtpForm extends StatelessWidget {
   const OtpForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-        child: Row(
+    final co = context.read<LoginController>();
+    return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
           height: 68,
           width: 64,
-          child: TextFormField(
+          child: TextField(
             autofocus: true,
             style: const TextStyle(color: fontPurple, fontSize: 18),
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
             onChanged: (value) {
+              co.codeChange(value, 0);
               if (value.length == 1) {
                 FocusScope.of(context).nextFocus();
               }
             },
-            onSaved: (value) {},
             inputFormatters: [
               LengthLimitingTextInputFormatter(1),
               FilteringTextInputFormatter.digitsOnly
@@ -54,16 +56,16 @@ class OtpForm extends StatelessWidget {
         SizedBox(
           height: 68,
           width: 64,
-          child: TextFormField(
+          child: TextField(
             style: const TextStyle(color: fontPurple),
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
             onChanged: (value) {
+              co.codeChange(value, 1);
               if (value.length == 1) {
                 FocusScope.of(context).nextFocus();
               }
             },
-            onSaved: (value) {},
             inputFormatters: [
               LengthLimitingTextInputFormatter(1),
               FilteringTextInputFormatter.digitsOnly
@@ -93,16 +95,16 @@ class OtpForm extends StatelessWidget {
         SizedBox(
           height: 68,
           width: 64,
-          child: TextFormField(
+          child: TextField(
             style: const TextStyle(color: fontPurple),
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
             onChanged: (value) {
+              co.codeChange(value, 2);
               if (value.length == 1) {
                 FocusScope.of(context).nextFocus();
               }
             },
-            onSaved: (value) {},
             inputFormatters: [
               LengthLimitingTextInputFormatter(1),
               FilteringTextInputFormatter.digitsOnly
@@ -132,12 +134,13 @@ class OtpForm extends StatelessWidget {
         SizedBox(
           height: 68,
           width: 64,
-          child: TextFormField(
+          child: TextField(
             style: const TextStyle(color: fontPurple),
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
-            onChanged: (value) {},
-            onSaved: (value) {},
+            onChanged: (value) {
+              co.codeChange(value, 3);
+            },
             inputFormatters: [
               LengthLimitingTextInputFormatter(1),
               FilteringTextInputFormatter.digitsOnly
@@ -164,6 +167,6 @@ class OtpForm extends StatelessWidget {
           ),
         ),
       ],
-    ));
+    );
   }
 }

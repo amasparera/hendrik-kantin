@@ -15,7 +15,7 @@ class OnBoardView extends StatefulWidget {
 class _OnBoardViewState extends State<OnBoardView> {
   @override
   void initState() {
-    context.read<OnBoardController>().init();
+    context.read<OnBoardController>().init(context);
     super.initState();
   }
 

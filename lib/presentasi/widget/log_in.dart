@@ -2,7 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kantin/const/navigasi.dart';
-import 'package:kantin/presentasi/page/home_view.dart';
+import 'package:kantin/const/request_datate.dart';
 import 'package:provider/provider.dart';
 
 import '../../const/main_app.dart';
@@ -19,6 +19,7 @@ class LoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final co = context.read<LoginController>();
     return FadeIn(
       duration: const Duration(milliseconds: 500),
       child: Padding(
@@ -37,24 +38,34 @@ class LoginWidget extends StatelessWidget {
               ),
               const Text("Hai, Selamat Datang!"),
               const SizedBox(height: 24),
-              const MainTextField(
+              MainTextField(
+                controller: co.emailLogin,
                 hint: "Email atau nomor ponsel",
-                icon: Icon(
+                icon: const Icon(
                   Icons.email_outlined,
                   color: Color(0xffBDBDBD),
                 ),
               ),
               const SizedBox(height: 12),
-              const MainTextField(
-                hint: "Password",
-                obscure: true,
-                icon: Icon(
-                  Icons.lock_outline_rounded,
-                  color: Color(0xffBDBDBD),
-                ),
-                visibiliti: Icon(Icons.visibility_off_outlined,
-                    color: Color(0xffBDBDBD)),
-              ),
+              Consumer<LoginController>(builder: (context, c, _) {
+                return MainTextField(
+                  controller: c.passwordLogin,
+                  hint: "Password",
+                  obscure: c.visibiliti,
+                  icon: const Icon(
+                    Icons.lock_outline_rounded,
+                    color: Color(0xffBDBDBD),
+                  ),
+                  visibiliti: GestureDetector(
+                    onTap: () => c.swithVisibiliti(),
+                    child: Icon(
+                        c.visibiliti
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility,
+                        color: const Color(0xffBDBDBD)),
+                  ),
+                );
+              }),
               Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -62,13 +73,25 @@ class LoginWidget extends StatelessWidget {
                         toPageCupertino(context, const LupaPassword());
                       },
                       child: const Text("Lupa Password?"))),
-              MainButton(
-                onPress: () {
-                  toPage(context, const HomeView());
-                },
-                text: "Masuk",
-                symetry: 0,
-              ),
+              Consumer<LoginController>(builder: (context, c, _) {
+                return MainButton(
+                  onPress: () {
+                    c.reqLogin == RequestState.empty ? c.login(context) : null;
+                  },
+                  text: c.reqLogin == RequestState.empty ? "Masuk" : null,
+                  symetry: 0,
+                  child: c.reqLogin == RequestState.loading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: bg,
+                            strokeWidth: 1.5,
+                          ),
+                        )
+                      : null,
+                );
+              }),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
@@ -122,7 +145,7 @@ class LoginWidget extends StatelessWidget {
                       style: const TextStyle(color: fontBlack),
                       children: [
                         TextSpan(
-                          text: "Masuk",
+                          text: "Buat akunmu",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               context.read<LoginController>().swith();

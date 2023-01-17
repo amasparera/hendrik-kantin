@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 
 class OnBoardController extends ChangeNotifier {
@@ -19,8 +21,12 @@ class OnBoardController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void init() {
+  void init(BuildContext context) async {
     pageController = PageController();
+    // final value = await LocalData().loadToken();
+    // if (value != null) {
+    //   toRemovePage(context, const HomeView());
+    // }
   }
 
   @override
