@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kantin/const/main_app.dart';
+import 'package:kantin/presentasi/controller/profile_controller.dart';
+import 'package:provider/provider.dart';
 
 import '../../const/navigasi.dart';
-import '../../dummi.dart';
 import 'edit_profile.dart';
 
 class Profileview extends StatefulWidget {
@@ -15,6 +17,8 @@ class Profileview extends StatefulWidget {
 class _ProfileviewState extends State<Profileview> {
   @override
   Widget build(BuildContext context) {
+    final co = context.read<ProfileController>();
+
     return Scaffold(
       backgroundColor: bg,
       appBar: AppBar(
@@ -43,65 +47,90 @@ class _ProfileviewState extends State<Profileview> {
           const SizedBox(height: padding),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: padding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 100,
-                  width: 100,
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border:
-                          Border.all(width: 1, color: const Color(0xffCE93D8))),
-                  child: const Hero(
-                    tag: "avatar",
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(person),
+            child: SizedBox(
+              height: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 100,
+                    width: 100,
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            width: 1, color: const Color(0xffCE93D8))),
+                    child: Hero(
+                      tag: "avatar",
+                      child:
+                          Consumer<ProfileController>(builder: (context, c, _) {
+                        return CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            backgroundImage: c.imageError
+                                ? null
+                                : NetworkImage(c.userModel!.photoProfile),
+                            onBackgroundImageError: c.imageError
+                                ? null
+                                : (exception, stackTrace) {
+                                    if (kDebugMode) {
+                                      print("Error loading image! $exception");
+                                    }
+
+                                    c.setError();
+                                  },
+                            child: c.imageError
+                                ? const Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                    size: 45,
+                                  )
+                                : null);
+                      }),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 100,
-                  width: 40,
-                  child: VerticalDivider(
-                    thickness: 1.2,
-                    color: Color(0xff898989),
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Aruna",
-                        style: mainStyle,
-                      ),
-                      Text(
-                        "Sentana",
-                        style:
-                            mainStyle.copyWith(fontWeight: FontWeight.normal),
-                      ),
-                      const Text("+62 1234567890"),
-                      const Text("johndoe@email.com")
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    toPageCupertino(context, const EditProfile());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Image.asset(
-                      "assets/icon/Edit Square.png",
-                      width: 22,
-                      height: 22,
+                  const SizedBox(
+                    height: 100,
+                    width: 40,
+                    child: VerticalDivider(
+                      thickness: 1.2,
+                      color: Color(0xff898989),
                     ),
                   ),
-                )
-              ],
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          co.userModel!.name,
+                          style: mainStyle,
+                        ),
+                        // Text(
+                        //   "Sentana",
+                        //   style:
+                        //       mainStyle.copyWith(fontWeight: FontWeight.normal),
+                        // ),
+                        Text(co.userModel!.phoneNumber),
+                        Text(co.userModel!.email)
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      toPageCupertino(context, const EditProfile());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Image.asset(
+                        "assets/icon/Edit Square.png",
+                        width: 22,
+                        height: 22,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           const Padding(

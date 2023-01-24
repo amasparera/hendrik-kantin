@@ -4,18 +4,20 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
+import 'package:kantin/const/local_data.dart';
 import 'package:kantin/data/repository/auth_repository.dart';
 import 'package:kantin/domain/respone/lupa_password_res.dart';
 
 import '../../const/api_app.dart';
 
 class AuthImpl implements AuthRepository {
-  Client http = Client();
+  Client _http = Client();
+
   @override
   Future<Either<String, String>> login(String email, String password) async {
     try {
       final api = Uri.parse(ApiApp.login);
-      final res = await http.post(api,
+      final res = await _http.post(api,
           body: {"email": email, "password": password},
           headers: {"Authorization": ApiApp.basicAuth});
 
@@ -39,7 +41,7 @@ class AuthImpl implements AuthRepository {
     print(1);
     try {
       final api = Uri.parse(ApiApp.regiter);
-      final res = await http.post(api, body: {
+      final res = await _http.post(api, body: {
         "email": email,
         "password": password,
         "name": nama,
@@ -65,7 +67,7 @@ class AuthImpl implements AuthRepository {
   Future<Either<String, LupaPasswordRes>> lupaPassword(String email) async {
     try {
       final api = Uri.parse(ApiApp.lupaPassword);
-      final res = await http.post(api,
+      final res = await _http.post(api,
           body: {"email": email}, headers: {"Authorization": ApiApp.basicAuth});
 
       final json = jsonDecode(res.body);
@@ -88,7 +90,7 @@ class AuthImpl implements AuthRepository {
     print(code);
     try {
       final api = Uri.parse(ApiApp.verifikasi);
-      final res = await http.post(api,
+      final res = await _http.post(api,
           body: {"email": email, "code": code},
           headers: {"Authorization": ApiApp.basicAuth});
 
@@ -111,7 +113,7 @@ class AuthImpl implements AuthRepository {
       String email, String password, String token) async {
     try {
       final api = Uri.parse("${ApiApp.updatePassword}$token");
-      final res = await http.post(api,
+      final res = await _http.post(api,
           body: {"email": email, "password": password},
           headers: {"Authorization": ApiApp.basicAuth});
 

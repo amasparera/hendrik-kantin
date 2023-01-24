@@ -1,5 +1,4 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kantin/const/local_data.dart';
 import 'package:kantin/const/navigasi.dart';
@@ -187,6 +186,7 @@ class LoginController extends ChangeNotifier {
     }, (r) {
       reqLogin = RequestState.empty;
       LocalData().saveToken(r);
+
       notifyListeners();
       toRemovePage(context, const HomeView());
     });
@@ -310,7 +310,7 @@ class LoginController extends ChangeNotifier {
       notifyListeners();
     }, (r) {
       reqKirimUlang = RequestState.empty;
-      pesanView = "Berhasil Update";
+      pesanView = "Berhasil Update password";
       toRemovePage(context, const BerhasilSandi());
       notifyListeners();
     });
@@ -393,7 +393,7 @@ class LoginController extends ChangeNotifier {
       notifyListeners();
     }, (r) {
       reqDaftar = RequestState.empty;
-      pesanView = "Berhasil daftar";
+      pesanView = "Berhasil daftar silakah login";
       toRemovePage(context, const BerhasilSandi());
       notifyListeners();
     });

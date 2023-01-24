@@ -2,6 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 
+import '../../const/local_data.dart';
+import '../../const/navigasi.dart';
+import '../page/home_view.dart';
+
 class OnBoardController extends ChangeNotifier {
   int indexPage = 0;
   late PageController pageController;
@@ -23,10 +27,10 @@ class OnBoardController extends ChangeNotifier {
 
   void init(BuildContext context) async {
     pageController = PageController();
-    // final value = await LocalData().loadToken();
-    // if (value != null) {
-    //   toRemovePage(context, const HomeView());
-    // }
+    final value = await LocalData().loadToken();
+    if (value != null) {
+      toRemovePage(context, const HomeView());
+    }
   }
 
   @override

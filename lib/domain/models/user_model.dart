@@ -20,7 +20,7 @@ class UserModel {
         customer: map["customer"],
         address: map["address"],
         phoneNumber: map["phone_number"],
-        photoProfile: map["phone_number"],
+        photoProfile: map["photo_profile"],
         name: map["name"],
         email: map["email"]);
   }

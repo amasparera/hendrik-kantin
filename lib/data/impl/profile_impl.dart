@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
@@ -68,33 +71,52 @@ class ProfileImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<String, String>> addFavoriteMenu(
-      String idCustomer, String idMenu, String status) async {
-    try {
-      final token = await _localData.loadToken();
-      final api = Uri.parse("${ApiApp.addFavorite}${token ?? ""}");
-      final res = await _http.post(api,
-          headers: {"Authorization": ApiApp.basicAuth},
-          body: {"customer": idCustomer, "menu": idMenu, "favorite": status});
+  Future<Either<String, String>> updateProfile(
+      String name, String address, String phoneNumber,
+      {File? photo}) async {
+    // try {
+    final token = await _localData.loadToken();
+    print(token);
+    final id = await _localData.loadId();
+    print(id);
 
-      final json = jsonDecode(res.body);
-      print(json);
-      if (res.statusCode == 201) {
-        return Right(json["msg"]);
-      } else if (json["msg"] != null) {
-        return Left(json['msg']);
-      } else {
-        return const Left("server tidak merespone");
-      }
-    } catch (e) {
-      return const Left("Aplikasi error");
+    final api = Uri.parse(ApiApp.updateProfile + (token ?? ""));
+    final req = MultipartRequest('POST', api);
+
+    req.headers.addAll({"Authorization": ApiApp.basicAuth});
+    req.fields.addAll({
+      "customer": id ?? '',
+      "name": name,
+      "address": address,
+      "phone_number": phoneNumber,
+    });
+    if (photo != null) {
+      req.files.add(await MultipartFile.fromPath("photo_profile", photo.path));
     }
-  }
 
-  @override
-  Future<Either<String, String>> updateProfile(String idCustomer, String name,
-      String address, String phoneNumber, String photo) {
-    // TODO: implement updateProfile
-    throw UnimplementedError();
+    print(req.fields);
+    final respone = await req.send();
+    final responed = await Response.fromStream(respone);
+    final json = jsonDecode(responed.body);
+    print(json);
+    print(responed.statusCode);
+    print(0);
+    if (responed.statusCode == 200 || responed.statusCode == 201) {
+      print(1);
+      return Right(json["msg"]);
+    } else if (json["data"][0]["msg"] != null) {
+      print(2);
+      return Left(json["data"][0]["msg"]);
+    } else if (json["msg"] != null) {
+      print(3);
+      return Left(json["msg"]);
+    } else {
+      print(4);
+      return const Left("Server Error");
+    }
+    // } catch (e) {
+    //   print(e);
+    //   return const Left("Aplikasi error");
+    // }
   }
 }

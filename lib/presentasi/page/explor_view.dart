@@ -1,15 +1,29 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kantin/const/navigasi.dart';
-import 'package:kantin/dummi.dart';
+import 'package:kantin/const/request_datate.dart';
+import 'package:kantin/presentasi/controller/profile_controller.dart';
 import 'package:kantin/presentasi/page/profile_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../const/main_app.dart';
 import '../widget/card_makan_siang.dart';
 import '../widget/card_resto.dart';
 import '../widget/search_home.dart';
 
-class ExplorView extends StatelessWidget {
+class ExplorView extends StatefulWidget {
   const ExplorView({super.key});
+
+  @override
+  State<ExplorView> createState() => _ExplorViewState();
+}
+
+class _ExplorViewState extends State<ExplorView> {
+  @override
+  void initState() {
+    context.read<ProfileController>().init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +52,46 @@ class ExplorView extends StatelessWidget {
                     ],
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => toPageCupertino(context, const Profileview()),
-                  child: Hero(
-                    tag: "avatar",
-                    child: CircleAvatar(
-                      backgroundColor: Colors.grey.shade200,
-                      onBackgroundImageError: (exception, stackTrace) =>
-                          const Icon(Icons.person),
-                      radius: 15,
-                      backgroundImage: const NetworkImage(person),
+                Consumer<ProfileController>(builder: (context, c, _) {
+                  return GestureDetector(
+                    onTap: () => toPageCupertino(context, const Profileview()),
+                    child: Hero(
+                      tag: "avatar",
+                      child:
+                          Consumer<ProfileController>(builder: (context, c, _) {
+                        return c.reqProfile == RequestState.empty
+                            ? CircleAvatar(
+                                backgroundColor: Colors.grey,
+                                backgroundImage: c.imageError
+                                    ? null
+                                    : NetworkImage(c.userModel!.photoProfile),
+                                onBackgroundImageError: c.imageError
+                                    ? null
+                                    : (exception, stackTrace) {
+                                        if (kDebugMode) {
+                                          print(
+                                              "Error loading image! $exception");
+                                        }
+
+                                        c.setError();
+                                      },
+                                child: c.imageError
+                                    ? const Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 20,
+                                      )
+                                    : null)
+                            : const CircleAvatar(
+                                backgroundColor: bg,
+                                child: CircularProgressIndicator(
+                                  color: purple,
+                                ),
+                              );
+                      }),
                     ),
-                  ),
-                )
+                  );
+                })
               ],
             ),
           ),

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import "./const/injection.dart" as injection;
 import 'presentasi/controller/login_controller.dart';
 import 'presentasi/controller/onbooard_controller.dart';
+import 'presentasi/controller/profile_controller.dart';
 import 'presentasi/controller/riwayat_controller.dart';
 import 'presentasi/page/onboard_view.dart';
 
@@ -37,7 +38,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => injection.locator<RiwayatController>()),
         ChangeNotifierProvider(
-            create: (_) => injection.locator<KeranjangController>())
+            create: (_) => injection.locator<KeranjangController>()),
+        ChangeNotifierProvider(
+            create: (_) => injection.locator<ProfileController>())
       ],
       child: MaterialApp(
           title: "E-Kantin",

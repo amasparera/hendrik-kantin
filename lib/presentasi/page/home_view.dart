@@ -33,9 +33,10 @@ class _HomeViewState extends State<HomeView> {
           showSelectedLabels: true,
           showUnselectedLabels: true,
           currentIndex: index,
-          onTap: (value) => setState(() {
-                index = value;
-              }),
+          onTap: (value) async {
+            index = value;
+            setState(() {});
+          },
           type: BottomNavigationBarType.fixed,
           // selectedIconTheme:
           //     const IconThemeData(color: purple, size: 40),
