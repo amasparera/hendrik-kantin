@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kantin/const/local_data.dart';
 import 'package:kantin/const/main_app.dart';
 import 'package:kantin/presentasi/controller/keranjang_controller.dart';
+import 'package:kantin/presentasi/page/home_view.dart';
 import 'package:provider/provider.dart';
 
 import "./const/injection.dart" as injection;
@@ -13,6 +15,7 @@ import 'presentasi/controller/riwayat_controller.dart';
 import 'presentasi/page/onboard_view.dart';
 
 void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
   await injection.registerLocator();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -21,11 +24,16 @@ void main(List<String> args) async {
         systemNavigationBarColor: Colors.transparent,
         systemNavigationBarIconBrightness: Brightness.dark),
   );
-  runApp(const MyApp());
+  final home = await LocalData().loadToken();
+  runApp(MyApp(
+    home: home,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, this.home});
+
+  final String? home;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: "E-Kantin",
           debugShowCheckedModeBanner: false,
-          home: const OnBoardView(),
+          home: home == null ? const OnBoardView() : const HomeView(),
           theme: ThemeData.light().copyWith(
               primaryColor: purple,
               textTheme: GoogleFonts.interTextTheme(),

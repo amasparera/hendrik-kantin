@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kantin/const/local_data.dart';
 import 'package:kantin/const/request_datate.dart';
 import 'package:kantin/data/impl/profile_impl.dart';
@@ -78,6 +79,49 @@ class ProfileController extends ChangeNotifier {
   void setError() {
     imageError = true;
     notifyListeners();
+  }
+
+  Future<void> getFoto(BuildContext context) async {
+    // showModalBottomSheet(
+    //     context: context,
+    //     shape: const RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.only(
+    //             topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+    //     builder: (context) => BottomSheet(
+    //           builder: (context) => Container(
+    //             height: 100,
+    //             padding: const EdgeInsets.symmetric(
+    //                 horizontal: padding, vertical: 12),
+    //             width: double.infinity,child: ,
+    //           ),
+    //           onClosing: () {},
+    //         ));
+    ImagePicker imagePicker = ImagePicker();
+    final file = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      profile = File(file.path);
+      print('dapat');
+      notifyListeners();
+    } else {
+      final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        // behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          inMaterialBanner: true,
+          title: 'Gagal!',
+          message: 'Gagal mengambil poto',
+
+          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }
   }
 
   void init() {

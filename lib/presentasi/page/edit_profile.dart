@@ -70,36 +70,44 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   Consumer<ProfileController>(builder: (context, c, _) {
                     return Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          radius: 40,
-                          backgroundImage: c.imageError
-                              ? null
-                              : NetworkImage(c.userModel!.photoProfile),
-                          onBackgroundImageError: c.imageError
-                              ? null
-                              : (exception, stackTrace) {
-                                  if (kDebugMode) {
-                                    print("Error loading image! $exception");
-                                  }
+                        padding: const EdgeInsets.all(6),
+                        child: c.profile == null
+                            ? CircleAvatar(
+                                backgroundColor: Colors.grey,
+                                radius: 40,
+                                backgroundImage: c.imageError
+                                    ? null
+                                    : NetworkImage(c.userModel!.photoProfile),
+                                onBackgroundImageError: c.imageError
+                                    ? null
+                                    : (exception, stackTrace) {
+                                        if (kDebugMode) {
+                                          print(
+                                              "Error loading image! $exception");
+                                        }
 
-                                  c.setError();
-                                },
-                          child: c.imageError
-                              ? const Icon(
-                                  Icons.person,
-                                  color: Colors.white,
-                                  size: 40,
-                                )
-                              : null),
-                    );
+                                        c.setError();
+                                      },
+                                child: c.imageError
+                                    ? const Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 40,
+                                      )
+                                    : null)
+                            : CircleAvatar(
+                                backgroundColor: Colors.grey,
+                                radius: 40,
+                                child: Image.asset(c.profile!.path),
+                              ));
                   }),
                   Positioned(
                     right: 0,
                     bottom: 0,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        co.getFoto(context);
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(6),
                         child: Image.asset(
