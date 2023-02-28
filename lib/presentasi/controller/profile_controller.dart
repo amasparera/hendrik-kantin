@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -100,7 +102,6 @@ class ProfileController extends ChangeNotifier {
     final file = await imagePicker.pickImage(source: ImageSource.gallery);
     if (file != null) {
       profile = File(file.path);
-      print('dapat');
       notifyListeners();
     } else {
       final snackBar = SnackBar(

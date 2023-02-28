@@ -40,7 +40,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            create: (_) => injection.locator<OnBoardController>()),
+            create: (_) =>
+                injection.locator<OnBoardController>()..init(context)),
         ChangeNotifierProvider(
             create: (_) => injection.locator<LoginController>()),
         ChangeNotifierProvider(

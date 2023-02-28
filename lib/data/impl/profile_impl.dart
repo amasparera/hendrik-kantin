@@ -40,7 +40,6 @@ class ProfileImpl implements ProfileRepository {
 
   @override
   Future<Either<String, String>> deleteProfile() {
-    // TODO: implement deleteProfile
     throw UnimplementedError();
   }
 
