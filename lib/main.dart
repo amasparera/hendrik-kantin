@@ -29,7 +29,7 @@ void main(List<String> args) async {
     home: home,
   ));
 }
-
+// masih baru
 class MyApp extends StatelessWidget {
   const MyApp({super.key, this.home});
 
